@@ -67,15 +67,11 @@ void cross_product(const double *v1, const double *v2, double *out)
 static inline
 double dot_product(const double *v1, const double *v2)
 {
-	__m128d _v1 __attribute__((aligned(64)));
-	__m128d  _v2 __attribute__((aligned(64)));
-	double _v_tmp[3] __attribute__((aligned(64)));
-	double _v1_tmp[3] __attribute__((aligned(64)));
-	double _v2_tmp[3] __attribute__((aligned(64)));
-	memcpy(_v1_tmp, v1, sizeof(double)*3 );
-	memcpy(_v2_tmp, v2, sizeof(double)*3 );
-	_v1 = _mm_load_pd(_v1_tmp);
-	_v2 = _mm_load_pd(_v2_tmp);
+	__m128d _v1;
+	__m128d  _v2;
+	double _v_tmp[3];
+	_v1 = _mm_loadu_pd(v1);
+	_v2 = _mm_loadu_pd(v2);
 	_v1 = _mm_mul_pd(_v1, _v2);
 	_mm_store_pd(_v_tmp, _v1);
 	return _v_tmp[0] + _v_tmp[1] + v1[2]*v2[2];
